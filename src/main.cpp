@@ -3093,6 +3093,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // Each connection can only send one version message
         if (pfrom->nVersion != 0)
         {
+	    printf("nVersion not equal to zero");
             pfrom->Misbehaving(1);
             return false;
         }
@@ -3187,6 +3188,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     else if (pfrom->nVersion == 0)
     {
         // Must have a version message before anything else
+	printf("Must have a version message first \n");
         pfrom->Misbehaving(1);
         return false;
     }
@@ -3511,8 +3513,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             mapAlreadyAskedFor.erase(inv);
         int nDoS = 0;
         if (state.IsInvalid(nDoS))
-            if (nDoS > 0)
+            if (nDoS > 0) {
+		printf("Problem with nDoS up in this");
                 pfrom->Misbehaving(nDoS);
+	}
     }
 
 
@@ -3582,6 +3586,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
         if (!filter.IsWithinSizeConstraints())
             // There is no excuse for sending a too-large filter
+	    printf("There is no excuse for sending a too-large filter");
             pfrom->Misbehaving(100);
         else
         {
@@ -3603,13 +3608,17 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // and thus, the maximum size any matched object can have) in a filteradd message
         if (vData.size() > MAX_SCRIPT_ELEMENT_SIZE)
         {
+	    printf("vData.size too big \n");
             pfrom->Misbehaving(100);
         } else {
             LOCK(pfrom->cs_filter);
             if (pfrom->pfilter)
                 pfrom->pfilter->insert(vData);
-            else
+            else  
+		{
+		printf("Problem ohera2114");
                 pfrom->Misbehaving(100);
+		}
         }
     }
 
