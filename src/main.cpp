@@ -3584,10 +3584,11 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CBloomFilter filter;
         vRecv >> filter;
 
-        if (!filter.IsWithinSizeConstraints())
+        if (!filter.IsWithinSizeConstraints()) {
             // There is no excuse for sending a too-large filter
 	    printf("There is no excuse for sending a too-large filter");
             pfrom->Misbehaving(100);
+	}
         else
         {
             LOCK(pfrom->cs_filter);
